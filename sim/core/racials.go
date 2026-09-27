@@ -295,7 +295,7 @@ func applyRaceEffects(agent Agent) {
 			Outcome:    OutcomeLanded,
 			ProcMask:   ProcMaskDirect | ProcMaskSpellDamage,
 			ProcChance: procChance,
-			ICD:        0,
+			ICD:        time.Second * 5,
 			Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
 				drainSpell.Cast(sim, result.Target)
 			},
