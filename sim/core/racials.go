@@ -14,14 +14,8 @@ func applyRaceEffects(agent Agent) {
 	switch character.Race {
 	case proto.Race_RaceDwarf:
 		// Dwarf: Mace Specialization (+1% crit with maces)
-		character.Env.RegisterPostFinalizeEffect(func() {
-			mh := character.GetMHWeapon()
-			oh := character.GetOHWeapon()
-			if (mh != nil && mh.WeaponType == proto.WeaponType_WeaponTypeMace) || (oh != nil && oh.WeaponType == proto.WeaponType_WeaponTypeMace) {
-				character.AddStat(stats.MeleeCrit, 1*CritRatingPerCritChance)
-				character.AddStat(stats.SpellCrit, 1*SpellCritRatingPerCritChance)
-			}
-		})
+		character.AddStat(stats.MeleeCrit, 1*CritRatingPerCritChance)
+		character.AddStat(stats.SpellCrit, 1*SpellCritRatingPerCritChance)
 
 		// Big Game Hunter (+5% damage to beasts)
 		character.Env.RegisterPostFinalizeEffect(func() {
@@ -132,14 +126,8 @@ func applyRaceEffects(agent Agent) {
 		character.MultiplyStat(stats.Spirit, 1.05)
 
 		// Sword Specialization (+2% crit with swords or 2H swords)
-		character.Env.RegisterPostFinalizeEffect(func() {
-			mh := character.GetMHWeapon()
-			oh := character.GetOHWeapon()
-			if (mh != nil && mh.WeaponType == proto.WeaponType_WeaponTypeSword) || (oh != nil && oh.WeaponType == proto.WeaponType_WeaponTypeSword) {
-				character.AddStat(stats.MeleeCrit, 2*CritRatingPerCritChance)
-				character.AddStat(stats.SpellCrit, 2*SpellCritRatingPerCritChance)
-			}
-		})
+		character.AddStat(stats.MeleeCrit, 2*CritRatingPerCritChance)
+		character.AddStat(stats.SpellCrit, 2*SpellCritRatingPerCritChance)
 
 	case proto.Race_RaceNightElf:
 		character.AddStat(stats.Dodge, 1)
@@ -182,14 +170,8 @@ func applyRaceEffects(agent Agent) {
 
 	case proto.Race_RaceOrc:
 		// Axe Specialization (+1% crit with axes or 2H axes)
-		character.Env.RegisterPostFinalizeEffect(func() {
-			mh := character.GetMHWeapon()
-			oh := character.GetOHWeapon()
-			if (mh != nil && mh.WeaponType == proto.WeaponType_WeaponTypeAxe) || (oh != nil && oh.WeaponType == proto.WeaponType_WeaponTypeAxe) {
-				character.AddStat(stats.MeleeCrit, 1*CritRatingPerCritChance)
-				character.AddStat(stats.SpellCrit, 1*SpellCritRatingPerCritChance)
-			}
-		})
+		character.AddStat(stats.MeleeCrit, 1*CritRatingPerCritChance)
+		character.AddStat(stats.SpellCrit, 1*SpellCritRatingPerCritChance)
 
 		// Blood Fury (+10% AP, +10% RAP, and +10% SP for 15 sec, 2 min CD)
 		actionID := ActionID{SpellID: 20572}
