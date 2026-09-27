@@ -284,12 +284,8 @@ func applyRaceEffects(agent Agent) {
 
 	case proto.Race_RaceUndead:
 		// Touch of the Grave:
-		// Warrior, Paladin, Rogue: 5% chance on spell/attack to drain health up to 5% max HP.
-		// Priest, Mage, Warlock: 10% chance on spell/attack to drain health up to 5% max HP.
+		// Your spells and attacks have a 5% chance to drain Health from the target, up to 5% of your maximum Health.
 		procChance := 0.05
-		if slices.Contains([]proto.Class{proto.Class_ClassPriest, proto.Class_ClassMage, proto.Class_ClassWarlock}, character.Class) {
-			procChance = 0.10
-		}
 		actionID := ActionID{SpellID: 462103}
 		drainSpell := character.RegisterSpell(SpellConfig{
 			ActionID:         actionID,
