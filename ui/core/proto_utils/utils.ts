@@ -1058,6 +1058,8 @@ export const raceToFaction: Record<Race, Faction> = {
 	[Race.RaceTauren]: Faction.Horde,
 	[Race.RaceTroll]: Faction.Horde,
 	[Race.RaceUndead]: Faction.Horde,
+	[Race.RaceSkyborneHighOrder]: Faction.Alliance,
+	[Race.RaceSkyborneWindshaper]: Faction.Horde,
 };
 
 const ALLIANCE_FACTIONS = new Set([509, 730, 889]);
@@ -1094,15 +1096,15 @@ export const specToClass: Record<Spec, Class> = {
 	[Spec.SpecTankWarrior]: Class.ClassWarrior,
 };
 
-const druidRaces = [Race.RaceTauren, Race.RaceNightElf];
-const hunterRaces = [Race.RaceDwarf, Race.RaceNightElf, Race.RaceOrc, Race.RaceTauren, Race.RaceTroll];
-const mageRaces = [Race.RaceTroll, Race.RaceGnome, Race.RaceHuman, Race.RaceUndead];
-const paladinRaces = [Race.RaceDwarf, Race.RaceHuman];
-const priestRaces = [Race.RaceTroll, Race.RaceDwarf, Race.RaceHuman, Race.RaceNightElf, Race.RaceUndead];
-const rogueRaces = [Race.RaceDwarf, Race.RaceGnome, Race.RaceHuman, Race.RaceNightElf, Race.RaceOrc, Race.RaceTroll, Race.RaceUndead];
-const shamanRaces = [Race.RaceOrc, Race.RaceTroll, Race.RaceTauren];
-const warlockRaces = [Race.RaceGnome, Race.RaceHuman, Race.RaceOrc, Race.RaceUndead];
-const warriorRaces = [Race.RaceDwarf, Race.RaceGnome, Race.RaceHuman, Race.RaceNightElf, Race.RaceOrc, Race.RaceTauren, Race.RaceTroll, Race.RaceUndead];
+const druidRaces = [Race.RaceTauren, Race.RaceNightElf, Race.RaceSkyborneHighOrder, Race.RaceSkyborneWindshaper];
+const hunterRaces = [Race.RaceHuman, Race.RaceDwarf, Race.RaceNightElf, Race.RaceSkyborneHighOrder, Race.RaceOrc, Race.RaceTauren, Race.RaceTroll, Race.RaceSkyborneWindshaper];
+const mageRaces = [Race.RaceHuman, Race.RaceGnome, Race.RaceSkyborneHighOrder, Race.RaceOrc, Race.RaceUndead, Race.RaceTroll];
+const paladinRaces = [Race.RaceHuman, Race.RaceDwarf, Race.RaceUndead];
+const priestRaces = [Race.RaceHuman, Race.RaceDwarf, Race.RaceNightElf, Race.RaceGnome, Race.RaceUndead, Race.RaceTroll];
+const rogueRaces = [Race.RaceHuman, Race.RaceDwarf, Race.RaceNightElf, Race.RaceGnome, Race.RaceSkyborneHighOrder, Race.RaceOrc, Race.RaceUndead, Race.RaceTroll, Race.RaceSkyborneWindshaper];
+const shamanRaces = [Race.RaceDwarf, Race.RaceOrc, Race.RaceTauren, Race.RaceTroll, Race.RaceSkyborneWindshaper];
+const warlockRaces = [Race.RaceHuman, Race.RaceGnome, Race.RaceOrc, Race.RaceUndead, Race.RaceTroll];
+const warriorRaces = [Race.RaceHuman, Race.RaceDwarf, Race.RaceNightElf, Race.RaceGnome, Race.RaceSkyborneHighOrder, Race.RaceOrc, Race.RaceTauren, Race.RaceTroll, Race.RaceUndead, Race.RaceSkyborneWindshaper];
 
 export const specToEligibleRaces: Record<Spec, Array<Race>> = {
 	[Spec.SpecBalanceDruid]: druidRaces,

@@ -79,6 +79,8 @@ var RaceOffsets = map[proto.Race]stats.Stats{
 		stats.Spirit:    1,
 		stats.Stamina:   1,
 	},
+	proto.Race_RaceSkyborneHighOrder:  {},
+	proto.Race_RaceSkyborneWindshaper: {},
 }
 
 var ClassBaseCrit = map[proto.Class]stats.Stats{

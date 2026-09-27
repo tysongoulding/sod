@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"slices"
 	"time"
 
@@ -14,18 +13,40 @@ func applyRaceEffects(agent Agent) {
 
 	switch character.Race {
 	case proto.Race_RaceDwarf:
-		character.AddStat(stats.FrostResistance, 10)
-		character.GunSpecializationAura()
+		// Dwarf: Mace Specialization (+1% crit with maces)
+		character.Env.RegisterPostFinalizeEffect(func() {
+			mh := character.GetMHWeapon()
+			oh := character.GetOHWeapon()
+			if (mh != nil && mh.WeaponType == proto.WeaponType_WeaponTypeMace) || (oh != nil && oh.WeaponType == proto.WeaponType_WeaponTypeMace) {
+				character.AddStat(stats.MeleeCrit, 1*CritRatingPerCritChance)
+				character.AddStat(stats.SpellCrit, 1*SpellCritRatingPerCritChance)
+			}
+		})
 
+		// Big Game Hunter (+5% damage to beasts)
+		character.Env.RegisterPostFinalizeEffect(func() {
+			for _, t := range character.Env.Encounter.Targets {
+				if t.MobType == proto.MobType_MobTypeBeast {
+					for _, at := range character.AttackTables[t.UnitIndex] {
+						at.DamageDealtMultiplier *= 1.05
+						at.CritMultiplier *= 1.05
+					}
+				}
+			}
+		})
+
+		// Stoneform (-10% physical damage taken for 8 sec, 3 min CD)
 		actionID := ActionID{SpellID: 20594}
-
-		statDep := character.NewDynamicMultiplyStat(stats.Armor, 1.1)
-		stoneFormAura := character.NewTemporaryStatsAuraWrapped("Stoneform", actionID, stats.Stats{}, time.Second*8, func(aura *Aura) {
-			aura.ApplyOnGain(func(aura *Aura, sim *Simulation) {
-				aura.Unit.EnableDynamicStatDep(sim, statDep)
-			}).ApplyOnExpire(func(aura *Aura, sim *Simulation) {
-				aura.Unit.DisableDynamicStatDep(sim, statDep)
-			})
+		stoneFormAura := character.RegisterAura(Aura{
+			Label:    "Stoneform",
+			ActionID: actionID,
+			Duration: time.Second * 8,
+			OnGain: func(aura *Aura, sim *Simulation) {
+				character.PseudoStats.DamageTakenMultiplier *= 0.90
+			},
+			OnExpire: func(aura *Aura, sim *Simulation) {
+				character.PseudoStats.DamageTakenMultiplier /= 0.90
+			},
 		})
 
 		spell := character.RegisterSpell(SpellConfig{
@@ -46,48 +67,145 @@ func applyRaceEffects(agent Agent) {
 			Spell: spell,
 			Type:  CooldownTypeSurvival,
 			ShouldActivate: func(s *Simulation, c *Character) bool {
-				// Only castable with manual APL Action
 				return false
 			},
 		})
-	case proto.Race_RaceGnome:
-		character.AddStat(stats.ArcaneResistance, 10)
-		character.MultiplyStat(stats.Intellect, 1.05)
-	case proto.Race_RaceHuman:
-		character.MultiplyStat(stats.Spirit, 1.05)
-		character.SwordSpecializationAura()
-		character.MaceSpecializationAura()
-	case proto.Race_RaceNightElf:
-		character.AddStat(stats.NatureResistance, 10)
-		character.AddStat(stats.Dodge, 1)
-		// TODO: Shadowmeld?
-	case proto.Race_RaceOrc:
-		character.AxeSpecializationAura()
 
-		if character.Class == proto.Class_ClassHunter || character.Class == proto.Class_ClassWarlock {
-			// Command Damage dealt by Hunter and Warlock pets increased by 5%
-			for _, pet := range character.Pets {
-				if !pet.IsGuardian() {
-					pet.PseudoStats.DamageDealtMultiplierAdditive += 0.05
-				}
-			}
+	case proto.Race_RaceGnome:
+		// Expansive Mind:
+		// Priest, Mage, Warlock: Maximum Mana +5%
+		// Rogue: Maximum Energy +5%
+		// Warrior: Maximum Rage +5%
+		if slices.Contains([]proto.Class{proto.Class_ClassPriest, proto.Class_ClassMage, proto.Class_ClassWarlock}, character.Class) {
+			character.MultiplyStat(stats.Mana, 1.05)
 		}
 
-		// Blood Fury
+		// Eureka! (Next 3 damaging abilities deal +10% damage and cost -10% resource, 2 min CD)
+		eurekaActionID := ActionID{SpellID: 462101}
+		eurekaAura := character.RegisterAura(Aura{
+			Label:     "Eureka!",
+			ActionID:  eurekaActionID,
+			Duration:  time.Second * 30,
+			MaxStacks: 3,
+			OnGain: func(aura *Aura, sim *Simulation) {
+				aura.SetStacks(sim, 3)
+			},
+			OnSpellHitDealt: func(aura *Aura, sim *Simulation, spell *Spell, result *SpellResult) {
+				if aura.GetStacks() > 0 && result.Landed() && result.Damage > 0 {
+					aura.RemoveStack(sim)
+				}
+			},
+		})
+		eurekaAura.AttachSpellMod(SpellModConfig{
+			Kind:       SpellMod_DamageDone_Pct,
+			FloatValue: 0.10,
+		})
+		eurekaAura.AttachSpellMod(SpellModConfig{
+			Kind:     SpellMod_PowerCost_Pct,
+			IntValue: -10,
+		})
+
+		eurekaSpell := character.RegisterSpell(SpellConfig{
+			ActionID: eurekaActionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 2,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
+				eurekaAura.Activate(sim)
+			},
+		})
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: eurekaSpell,
+			Type:  CooldownTypeDPS,
+		})
+
+	case proto.Race_RaceHuman:
+		character.MultiplyStat(stats.Spirit, 1.05)
+
+		// Sword Specialization (+2% crit with swords or 2H swords)
+		character.Env.RegisterPostFinalizeEffect(func() {
+			mh := character.GetMHWeapon()
+			oh := character.GetOHWeapon()
+			if (mh != nil && mh.WeaponType == proto.WeaponType_WeaponTypeSword) || (oh != nil && oh.WeaponType == proto.WeaponType_WeaponTypeSword) {
+				character.AddStat(stats.MeleeCrit, 2*CritRatingPerCritChance)
+				character.AddStat(stats.SpellCrit, 2*SpellCritRatingPerCritChance)
+			}
+		})
+
+	case proto.Race_RaceNightElf:
+		character.AddStat(stats.Dodge, 1)
+
+		// Elune's Light (+10% crit chance for 15 sec, 3 min CD)
+		eluneActionID := ActionID{SpellID: 462102}
+		critVal := 10.0 * CritRatingPerCritChance
+		elunesLightAura := character.RegisterAura(Aura{
+			Label:    "Elune's Light",
+			ActionID: eluneActionID,
+			Duration: time.Second * 15,
+			OnGain: func(aura *Aura, sim *Simulation) {
+				character.AddStatDynamic(sim, stats.MeleeCrit, critVal)
+				character.AddStatDynamic(sim, stats.SpellCrit, critVal)
+			},
+			OnExpire: func(aura *Aura, sim *Simulation) {
+				character.AddStatDynamic(sim, stats.MeleeCrit, -critVal)
+				character.AddStatDynamic(sim, stats.SpellCrit, -critVal)
+			},
+		})
+
+		eluneSpell := character.RegisterSpell(SpellConfig{
+			ActionID: eluneActionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 3,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
+				elunesLightAura.Activate(sim)
+			},
+		})
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: eluneSpell,
+			Type:  CooldownTypeDPS,
+		})
+
+	case proto.Race_RaceOrc:
+		// Axe Specialization (+1% crit with axes or 2H axes)
+		character.Env.RegisterPostFinalizeEffect(func() {
+			mh := character.GetMHWeapon()
+			oh := character.GetOHWeapon()
+			if (mh != nil && mh.WeaponType == proto.WeaponType_WeaponTypeAxe) || (oh != nil && oh.WeaponType == proto.WeaponType_WeaponTypeAxe) {
+				character.AddStat(stats.MeleeCrit, 1*CritRatingPerCritChance)
+				character.AddStat(stats.SpellCrit, 1*SpellCritRatingPerCritChance)
+			}
+		})
+
+		// Blood Fury (+10% AP, +10% RAP, and +10% SP for 15 sec, 2 min CD)
 		actionID := ActionID{SpellID: 20572}
-		var bloodFuryAP float64
+		var bfAP, bfRAP, bfSP float64
 		bloodFuryAura := character.RegisterAura(Aura{
 			Label:    "Blood Fury",
 			ActionID: actionID,
 			Duration: time.Second * 15,
-			// Tooltip is misleading; ap bonus is base AP plus AP from current strength, does not include +attackpower on items/buffs
 			OnGain: func(aura *Aura, sim *Simulation) {
-				bloodFuryAP = (character.GetBaseStats()[stats.AttackPower] + (character.GetStat(stats.Strength) * APPerStrength[character.Class]) + (character.GetStat(stats.Agility) * APPerAgility[character.Class])) * 0.25
-				character.AddStatDynamic(sim, stats.AttackPower, bloodFuryAP)
+				bfAP = character.GetStat(stats.AttackPower) * 0.10
+				bfRAP = character.GetStat(stats.RangedAttackPower) * 0.10
+				bfSP = character.GetStat(stats.SpellPower) * 0.10
+				character.AddStatDynamic(sim, stats.AttackPower, bfAP)
+				character.AddStatDynamic(sim, stats.RangedAttackPower, bfRAP)
+				character.AddStatDynamic(sim, stats.SpellPower, bfSP)
 			},
-
 			OnExpire: func(aura *Aura, sim *Simulation) {
-				character.AddStatDynamic(sim, stats.AttackPower, -bloodFuryAP)
+				character.AddStatDynamic(sim, stats.AttackPower, -bfAP)
+				character.AddStatDynamic(sim, stats.RangedAttackPower, -bfRAP)
+				character.AddStatDynamic(sim, stats.SpellPower, -bfSP)
 			},
 		})
 
@@ -95,9 +213,6 @@ func applyRaceEffects(agent Agent) {
 			ActionID: actionID,
 			Flags:    SpellFlagNoOnCastComplete,
 			Cast: CastConfig{
-				DefaultCast: Cast{
-					GCD: GCDDefault,
-				},
 				CD: Cooldown{
 					Timer:    character.NewTimer(),
 					Duration: time.Minute * 2,
@@ -112,13 +227,14 @@ func applyRaceEffects(agent Agent) {
 			Spell: spell,
 			Type:  CooldownTypeDPS,
 		})
-	case proto.Race_RaceTauren:
-		character.AddStat(stats.NatureResistance, 10)
-		character.MultiplyStat(stats.Health, 1.05)
-	case proto.Race_RaceTroll:
-		character.BowSpecializationAura()
-		character.ThrownSpecializationAura()
 
+	case proto.Race_RaceTauren:
+		// Endurance: Total Health +5%, Hit +1% (physical and spell hit)
+		character.MultiplyStat(stats.Health, 1.05)
+		character.AddStat(stats.MeleeHit, 1*MeleeHitRatingPerHitChance)
+		character.AddStat(stats.SpellHit, 1*SpellHitRatingPerHitChance)
+
+	case proto.Race_RaceTroll:
 		// Beast Slaying (+5% damage to beasts)
 		character.Env.RegisterPostFinalizeEffect(func() {
 			for _, t := range character.Env.Encounter.Targets {
@@ -131,126 +247,102 @@ func applyRaceEffects(agent Agent) {
 			}
 		})
 
-		// Berserking
-		berserkingTimer := character.NewTimer()
-		// Baseline cooldown
-		makeBerserkingCooldown(character, 0, berserkingTimer)
-		// Hard-coded percentage cooldown options
-		makeBerserkingCooldown(character, .1, berserkingTimer)
-		makeBerserkingCooldown(character, .15, berserkingTimer)
-		makeBerserkingCooldown(character, .2, berserkingTimer)
-		makeBerserkingCooldown(character, .25, berserkingTimer)
-		makeBerserkingCooldown(character, .3, berserkingTimer)
+		// Berserking (Increases attack and casting speed by 10% for 10 sec, 3 min CD)
+		berserkingActionID := ActionID{SpellID: 26297}
+		berserkingAura := character.RegisterAura(Aura{
+			Label:    "Berserking",
+			ActionID: berserkingActionID,
+			Duration: time.Second * 10,
+			OnGain: func(aura *Aura, sim *Simulation) {
+				character.MultiplyCastSpeed(1.10)
+				character.MultiplyAttackSpeed(sim, 1.10)
+			},
+			OnExpire: func(aura *Aura, sim *Simulation) {
+				character.MultiplyCastSpeed(1 / 1.10)
+				character.MultiplyAttackSpeed(sim, 1/1.10)
+			},
+		})
+
+		berserkingSpell := character.RegisterSpell(SpellConfig{
+			ActionID: berserkingActionID,
+			Flags:    SpellFlagNoOnCastComplete,
+			Cast: CastConfig{
+				CD: Cooldown{
+					Timer:    character.NewTimer(),
+					Duration: time.Minute * 3,
+				},
+			},
+			ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
+				berserkingAura.Activate(sim)
+			},
+		})
+
+		character.AddMajorCooldown(MajorCooldown{
+			Spell: berserkingSpell,
+			Type:  CooldownTypeDPS,
+		})
+
 	case proto.Race_RaceUndead:
-		character.AddStat(stats.ShadowResistance, 10)
-	}
-}
-
-// If customPercentage is 0, use the baseline Berserking calculations from health missing
-// otherwise create a cooldown hard-coded to the custom percentage.
-func makeBerserkingCooldown(character *Character, customPercentage float64, timer *Timer) {
-	actionID := ActionID{SpellID: 26297, Tag: int32(customPercentage * 20)}
-
-	label := "Berserking"
-	if customPercentage != 0 {
-		label = fmt.Sprintf("%s (%d)", label, int(customPercentage*100))
-	}
-
-	calcBerserkingPct := func() float64 {
-		if customPercentage != 0 {
-			return customPercentage
+		// Touch of the Grave:
+		// Warrior, Paladin, Rogue: 5% chance on spell/attack to drain health up to 5% max HP.
+		// Priest, Mage, Warlock: 10% chance on spell/attack to drain health up to 5% max HP.
+		procChance := 0.05
+		if slices.Contains([]proto.Class{proto.Class_ClassPriest, proto.Class_ClassMage, proto.Class_ClassWarlock}, character.Class) {
+			procChance = 0.10
 		}
-		// from 10% at full health to 30% at 40% or less health
-		switch hp := character.CurrentHealthPercent(); {
-		case hp >= 1:
-			return 0.1
-		case hp <= 0.4:
-			return 0.3
-		default:
-			return 0.1 + (1-hp)/3
-		}
-	}
-
-	var berserkingAura *Aura
-	var berserkingHaste float64
-	if character.HasManaBar() {
-		// Mana-using classes gain a flat % reduction in attack and cast speed
-		berserkingAura = character.RegisterAura(Aura{
-			Label:    label,
-			ActionID: actionID,
-			Duration: time.Second * 10,
-			OnGain: func(aura *Aura, sim *Simulation) {
-				berserkingHaste = 1 / (1 - calcBerserkingPct())
-
-				character.MultiplyCastSpeed(berserkingHaste)
-				character.MultiplyAttackSpeed(sim, berserkingHaste)
-
-				if sim.Log != nil {
-					character.Log(sim, "Berserking increased attack and casting speed by %.2f%% (%.2f%% hp)", berserkingHaste*100-100, character.CurrentHealthPercent()*100)
+		actionID := ActionID{SpellID: 462103}
+		drainSpell := character.RegisterSpell(SpellConfig{
+			ActionID:         actionID,
+			SpellSchool:      SpellSchoolShadow,
+			DefenseType:      DefenseTypeMagic,
+			ProcMask:         ProcMaskSpellDamage,
+			Flags:            SpellFlagNoOnCastComplete | SpellFlagPassiveSpell,
+			DamageMultiplier: 1,
+			ThreatMultiplier: 1,
+			ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
+				drainAmount := character.MaxHealth() * 0.05
+				res := spell.CalcAndDealDamage(sim, target, drainAmount, spell.OutcomeMagicHitAndCrit)
+				if res.Landed() {
+					character.GainHealth(sim, drainAmount, spell.HealthMetrics(&character.Unit))
 				}
 			},
-			OnExpire: func(aura *Aura, sim *Simulation) {
-				character.MultiplyCastSpeed(1 / berserkingHaste)
-				character.MultiplyAttackSpeed(sim, 1/berserkingHaste)
+		})
+		MakeProcTriggerAura(&character.Unit, ProcTrigger{
+			Name:       "Touch of the Grave Trigger",
+			Callback:   CallbackOnSpellHitDealt,
+			Outcome:    OutcomeLanded,
+			ProcMask:   ProcMaskDirect | ProcMaskSpellDamage,
+			ProcChance: procChance,
+			ICD:        0,
+			Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
+				drainSpell.Cast(sim, result.Target)
 			},
 		})
-	} else {
-		// Non-mana bar classes gain a flat % reduction in attack and cast speed
-		berserkingAura = character.RegisterAura(Aura{
-			Label:    label,
-			ActionID: actionID,
-			Duration: time.Second * 10,
-			OnGain: func(aura *Aura, sim *Simulation) {
-				berserkingHaste = 1 + calcBerserkingPct()
 
-				character.MultiplyAttackSpeed(sim, berserkingHaste)
+	case proto.Race_RaceSkyborneHighOrder, proto.Race_RaceSkyborneWindshaper:
+		// Wind Blessed (+1% spellcasting, melee, and ranged Haste)
+		character.MultiplyCastSpeed(1.01)
+		character.PseudoStats.MeleeSpeedMultiplier *= 1.01
+		character.PseudoStats.RangedSpeedMultiplier *= 1.01
 
-				if sim.Log != nil {
-					character.Log(sim, "Berserking increased attack speed by %.2f%% (%.2f%% hp)", berserkingHaste*100-100, character.CurrentHealthPercent()*100)
+		// Elemental Insight (+5% damage to elementals)
+		character.Env.RegisterPostFinalizeEffect(func() {
+			for _, t := range character.Env.Encounter.Targets {
+				if t.MobType == proto.MobType_MobTypeElemental {
+					for _, at := range character.AttackTables[t.UnitIndex] {
+						at.DamageDealtMultiplier *= 1.05
+						at.CritMultiplier *= 1.05
+					}
 				}
-			},
-			OnExpire: func(aura *Aura, sim *Simulation) {
-				character.MultiplyAttackSpeed(sim, 1/berserkingHaste)
-			},
+			}
 		})
 	}
-
-	config := SpellConfig{
-		ActionID: actionID,
-
-		Cast: CastConfig{
-			CD: Cooldown{
-				Timer:    timer,
-				Duration: time.Minute * 3,
-			},
-		},
-
-		ApplyEffects: func(sim *Simulation, _ *Unit, _ *Spell) {
-			berserkingAura.Activate(sim)
-		},
-	}
-
-	switch {
-	case character.HasManaBar():
-		config.ManaCost = ManaCostOptions{BaseCost: 0.07}
-	case character.HasRageBar():
-		config.RageCost = RageCostOptions{Cost: 5}
-	case character.HasEnergyBar():
-		config.EnergyCost = EnergyCostOptions{Cost: 10}
-	}
-
-	berserkingSpell := character.RegisterSpell(config)
-
-	character.AddMajorCooldown(MajorCooldown{
-		Spell: berserkingSpell,
-		Type:  CooldownTypeDPS,
-	})
 }
 
 func (character *Character) GetFaction() proto.Faction {
-	if slices.Contains([]proto.Race{proto.Race_RaceHuman, proto.Race_RaceDwarf, proto.Race_RaceGnome, proto.Race_RaceNightElf}, character.Race) {
+	if slices.Contains([]proto.Race{proto.Race_RaceHuman, proto.Race_RaceDwarf, proto.Race_RaceGnome, proto.Race_RaceNightElf, proto.Race_RaceSkyborneHighOrder}, character.Race) {
 		return proto.Faction_Alliance
-	} else if slices.Contains([]proto.Race{proto.Race_RaceOrc, proto.Race_RaceTroll, proto.Race_RaceTauren, proto.Race_RaceUndead}, character.Race) {
+	} else if slices.Contains([]proto.Race{proto.Race_RaceOrc, proto.Race_RaceTroll, proto.Race_RaceTauren, proto.Race_RaceUndead, proto.Race_RaceSkyborneWindshaper}, character.Race) {
 		return proto.Faction_Horde
 	} else {
 		return proto.Faction_Unknown
