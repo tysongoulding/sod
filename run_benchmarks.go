@@ -9,12 +9,14 @@ import (
 	_ "github.com/wowsims/sod/sim/common"
 	"github.com/wowsims/sod/sim/core"
 	"github.com/wowsims/sod/sim/core/proto"
+	balancedruid "github.com/wowsims/sod/sim/druid/balance"
 	feraldruid "github.com/wowsims/sod/sim/druid/feral"
 	dpshunter "github.com/wowsims/sod/sim/hunter/dps_hunter"
 	dpsmage "github.com/wowsims/sod/sim/mage/dps_mage"
 	retributionpaladin "github.com/wowsims/sod/sim/paladin/retribution"
 	shadowpriest "github.com/wowsims/sod/sim/priest/shadow"
 	dpsrogue "github.com/wowsims/sod/sim/rogue/dps_rogue"
+	elementalshaman "github.com/wowsims/sod/sim/shaman/elemental"
 	enhancementshaman "github.com/wowsims/sod/sim/shaman/enhancement"
 	dpswarlock "github.com/wowsims/sod/sim/warlock/dps"
 	dpswarrior "github.com/wowsims/sod/sim/warrior/dps_warrior"
@@ -51,7 +53,9 @@ func main() {
 	shadowpriest.RegisterShadowPriest()
 	retributionpaladin.RegisterRetributionPaladin()
 	enhancementshaman.RegisterEnhancementShaman()
+	elementalshaman.RegisterElementalShaman()
 	feraldruid.RegisterFeralDruid()
+	balancedruid.RegisterBalanceDruid()
 
 	configs := []ClassConfig{
 		{
@@ -213,7 +217,7 @@ func main() {
 			},
 		},
 		{
-			ClassName: "Shaman",
+			ClassName: "Enhancement Shaman",
 			Class:     proto.Class_ClassShaman,
 			GearSet:   "ui/enhancement_shaman/gear_sets/phase_4_dw.gear.json",
 			Apl:       "ui/enhancement_shaman/apls/phase_4.apl.json",
@@ -232,7 +236,26 @@ func main() {
 			},
 		},
 		{
-			ClassName: "Druid",
+			ClassName: "Elemental Shaman",
+			Class:     proto.Class_ClassShaman,
+			GearSet:   "ui/elemental_shaman/gear_sets/phase_4.gear.json",
+			Apl:       "ui/elemental_shaman/apls/phase_4.apl.json",
+			Talents:   "550301550000151--50205300005",
+			SpecOptions: &proto.Player_ElementalShaman{
+				ElementalShaman: &proto.ElementalShaman{
+					Options: &proto.ElementalShaman_Options{},
+				},
+			},
+			Races: []proto.Race{
+				proto.Race_RaceDwarf,
+				proto.Race_RaceOrc,
+				proto.Race_RaceTauren,
+				proto.Race_RaceTroll,
+				proto.Race_RaceSkyborneWindshaper,
+			},
+		},
+		{
+			ClassName: "Feral Druid",
 			Class:     proto.Class_ClassDruid,
 			GearSet:   "ui/feral_druid/gear_sets/phase_4.gear.json",
 			Apl:       "ui/feral_druid/apls/phase_4.apl.json",
@@ -241,6 +264,26 @@ func main() {
 				FeralDruid: &proto.FeralDruid{
 					Options: &proto.FeralDruid_Options{
 						LatencyMs: 100,
+					},
+				},
+			},
+			Races: []proto.Race{
+				proto.Race_RaceNightElf,
+				proto.Race_RaceSkyborneHighOrder,
+				proto.Race_RaceTauren,
+				proto.Race_RaceSkyborneWindshaper,
+			},
+		},
+		{
+			ClassName: "Balance Druid",
+			Class:     proto.Class_ClassDruid,
+			GearSet:   "ui/balance_druid/gear_sets/phase_4.gear.json",
+			Apl:       "ui/balance_druid/apls/phase_4.apl.json",
+			Talents:   "5000550012551251--5005031",
+			SpecOptions: &proto.Player_BalanceDruid{
+				BalanceDruid: &proto.BalanceDruid{
+					Options: &proto.BalanceDruid_Options{
+						OkfUptime: 0.2,
 					},
 				},
 			},
