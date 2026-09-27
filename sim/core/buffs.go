@@ -584,8 +584,10 @@ func makeExclusiveBuff(aura *Aura, config BuffConfig) {
 func applyBuffEffects(agent Agent, playerFaction proto.Faction, raidBuffs *proto.RaidBuffs, partyBuffs *proto.PartyBuffs, individualBuffs *proto.IndividualBuffs) {
 	character := agent.GetCharacter()
 	level := character.Level
-	isAlliance := playerFaction == proto.Faction_Alliance
-	isHorde := playerFaction == proto.Faction_Horde
+	// In WoW Forever, Paladin and Shaman are available to both factions,
+	// so players have access to both Paladin blessings (including Kings) and Shaman buffs/totems.
+	isAlliance := true
+	isHorde := true
 	bonusResist := float64(0)
 
 	if raidBuffs.ArcaneBrilliance {
