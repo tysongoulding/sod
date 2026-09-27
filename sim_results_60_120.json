@@ -5,43 +5,43 @@
     "results": [
       {
         "race": "RaceOrc",
-        "dps": 3824.0725508885102
+        "dps": 3823.950280721056
       },
       {
         "race": "RaceUndead",
-        "dps": 3777.3722708158084
+        "dps": 3775.962078288567
       },
       {
         "race": "RaceTroll",
-        "dps": 3770.869831295537
+        "dps": 3770.7182055923536
       },
       {
         "race": "RaceNightElf",
-        "dps": 3758.8512323058867
-      },
-      {
-        "race": "RaceSkyborneWindshaper",
-        "dps": 3725.149855589257
+        "dps": 3759.2122938522743
       },
       {
         "race": "RaceSkyborneHighOrder",
-        "dps": 3723.964550247112
+        "dps": 3725.867348648712
       },
       {
-        "race": "RaceTauren",
-        "dps": 3712.890208669805
-      },
-      {
-        "race": "RaceHuman",
-        "dps": 3707.9361700824797
-      },
-      {
-        "race": "RaceDwarf",
-        "dps": 3707.070696950113
+        "race": "RaceSkyborneWindshaper",
+        "dps": 3724.517129550083
       },
       {
         "race": "RaceGnome",
-        "dps": 3599.726764832441
+        "dps": 3713.418183511987
+      },
+      {
+        "race": "RaceTauren",
+        "dps": 3712.894198842484
+      },
+      {
+        "race": "RaceHuman",
+        "dps": 3708.0728425358184
+      },
+      {
+        "race": "RaceDwarf",
+        "dps": 3707.4792028774627
       }
     ]
   },
@@ -51,43 +51,43 @@
     "results": [
       {
         "race": "RaceUndead",
-        "dps": 3373.125517662823
+        "dps": 3374.3960954055156
       },
       {
         "race": "RaceOrc",
-        "dps": 3349.8301358957133
+        "dps": 3350.066899171077
       },
       {
         "race": "RaceTroll",
-        "dps": 3325.0846976465073
+        "dps": 3324.7017302999066
       },
       {
         "race": "RaceSkyborneHighOrder",
-        "dps": 3322.3052310381736
+        "dps": 3322.9031364365815
       },
       {
         "race": "RaceSkyborneWindshaper",
-        "dps": 3321.6145101304674
+        "dps": 3322.2334774807487
       },
       {
         "race": "RaceNightElf",
-        "dps": 3314.1198952591662
+        "dps": 3313.877115479361
       },
       {
         "race": "RaceTauren",
-        "dps": 3296.97723596566
+        "dps": 3297.1051949859607
       },
       {
         "race": "RaceHuman",
-        "dps": 3294.5478841595805
+        "dps": 3294.511203862671
       },
       {
         "race": "RaceDwarf",
-        "dps": 3293.532077798319
+        "dps": 3293.6742448513914
       },
       {
         "race": "RaceGnome",
-        "dps": 3237.8171107586572
+        "dps": 3292.8418851799693
       }
     ]
   },
@@ -97,39 +97,39 @@
     "results": [
       {
         "race": "RaceOrc",
-        "dps": 4168.061951917881
+        "dps": 4168.186629170699
       },
       {
         "race": "RaceNightElf",
-        "dps": 4138.181915695373
+        "dps": 4139.007270412217
       },
       {
         "race": "RaceUndead",
-        "dps": 4130.743557723459
-      },
-      {
-        "race": "RaceTroll",
-        "dps": 4102.7695241138
-      },
-      {
-        "race": "RaceSkyborneHighOrder",
-        "dps": 4081.1659350547143
-      },
-      {
-        "race": "RaceSkyborneWindshaper",
-        "dps": 4079.275347553127
-      },
-      {
-        "race": "RaceHuman",
-        "dps": 4063.030423450344
-      },
-      {
-        "race": "RaceDwarf",
-        "dps": 4058.125576074404
+        "dps": 4130.774310482295
       },
       {
         "race": "RaceGnome",
-        "dps": 3976.923929272368
+        "dps": 4107.167624484029
+      },
+      {
+        "race": "RaceTroll",
+        "dps": 4102.564989965591
+      },
+      {
+        "race": "RaceSkyborneHighOrder",
+        "dps": 4080.8544568447296
+      },
+      {
+        "race": "RaceSkyborneWindshaper",
+        "dps": 4080.488677532138
+      },
+      {
+        "race": "RaceHuman",
+        "dps": 4062.270850071198
+      },
+      {
+        "race": "RaceDwarf",
+        "dps": 4057.9362332710775
       }
     ]
   },
@@ -139,39 +139,39 @@
     "results": [
       {
         "race": "RaceOrc",
-        "dps": 4115.5506427363025
+        "dps": 4115.734545741585
       },
       {
         "race": "RaceUndead",
-        "dps": 4096.033746714294
+        "dps": 4096.7397750941855
       },
       {
         "race": "RaceNightElf",
-        "dps": 4078.6348505029914
-      },
-      {
-        "race": "RaceTroll",
-        "dps": 4049.0389635498873
-      },
-      {
-        "race": "RaceSkyborneWindshaper",
-        "dps": 4044.130274187634
-      },
-      {
-        "race": "RaceSkyborneHighOrder",
-        "dps": 4043.7711339026014
-      },
-      {
-        "race": "RaceHuman",
-        "dps": 4032.2703103667345
-      },
-      {
-        "race": "RaceDwarf",
-        "dps": 4027.530089915173
+        "dps": 4077.507701908388
       },
       {
         "race": "RaceGnome",
-        "dps": 3951.6112820683275
+        "dps": 4055.0550977774465
+      },
+      {
+        "race": "RaceTroll",
+        "dps": 4048.938102678882
+      },
+      {
+        "race": "RaceSkyborneWindshaper",
+        "dps": 4044.7991297342187
+      },
+      {
+        "race": "RaceSkyborneHighOrder",
+        "dps": 4044.5943156997105
+      },
+      {
+        "race": "RaceHuman",
+        "dps": 4031.8486170198767
+      },
+      {
+        "race": "RaceDwarf",
+        "dps": 4026.7917157436877
       }
     ]
   },
@@ -181,27 +181,27 @@
     "results": [
       {
         "race": "RaceTroll",
-        "dps": 2995.4547584095576
-      },
-      {
-        "race": "RaceOrc",
-        "dps": 2945.714458723376
-      },
-      {
-        "race": "RaceUndead",
-        "dps": 2926.535838945659
-      },
-      {
-        "race": "RaceHuman",
-        "dps": 2916.1355902287464
-      },
-      {
-        "race": "RaceSkyborneHighOrder",
-        "dps": 2815.623533531467
+        "dps": 2995.984428079808
       },
       {
         "race": "RaceGnome",
-        "dps": 2476.4475860528573
+        "dps": 2980.008021493745
+      },
+      {
+        "race": "RaceOrc",
+        "dps": 2946.98644988566
+      },
+      {
+        "race": "RaceUndead",
+        "dps": 2926.803737678178
+      },
+      {
+        "race": "RaceHuman",
+        "dps": 2916.9030696055834
+      },
+      {
+        "race": "RaceSkyborneHighOrder",
+        "dps": 2815.0607335953887
       }
     ]
   },
@@ -210,28 +210,28 @@
     "duration": 120,
     "results": [
       {
-        "race": "RaceTroll",
-        "dps": 2622.4947504492507
+        "race": "RaceGnome",
+        "dps": 2666.306663266325
       },
       {
-        "race": "RaceUndead",
-        "dps": 2595.8502353799395
+        "race": "RaceTroll",
+        "dps": 2622.6207120378785
       },
       {
         "race": "RaceOrc",
-        "dps": 2594.8088660791686
+        "dps": 2596.3992775563474
+      },
+      {
+        "race": "RaceUndead",
+        "dps": 2596.301986269857
       },
       {
         "race": "RaceSkyborneHighOrder",
-        "dps": 2587.7230883837924
+        "dps": 2587.812706984851
       },
       {
         "race": "RaceHuman",
-        "dps": 2583.332674717519
-      },
-      {
-        "race": "RaceGnome",
-        "dps": 2414.659089168278
+        "dps": 2582.5932329956704
       }
     ]
   },
@@ -241,35 +241,35 @@
     "results": [
       {
         "race": "RaceNightElf",
-        "dps": 837.9625398396928
+        "dps": 838.2822193602088
       },
       {
         "race": "RaceOrc",
-        "dps": 835.5350076071325
-      },
-      {
-        "race": "RaceSkyborneWindshaper",
-        "dps": 824.7874807092676
+        "dps": 835.6116895300912
       },
       {
         "race": "RaceTroll",
-        "dps": 824.724217093476
+        "dps": 824.7088124782872
       },
       {
         "race": "RaceHuman",
-        "dps": 824.5314639497635
+        "dps": 824.6885492181708
       },
       {
         "race": "RaceSkyborneHighOrder",
-        "dps": 824.0941605141008
+        "dps": 824.2973319294481
+      },
+      {
+        "race": "RaceSkyborneWindshaper",
+        "dps": 823.866062301484
       },
       {
         "race": "RaceTauren",
-        "dps": 823.6234495253701
+        "dps": 823.780256994152
       },
       {
         "race": "RaceDwarf",
-        "dps": 822.8371101516325
+        "dps": 822.9750446323795
       }
     ]
   },
@@ -279,35 +279,35 @@
     "results": [
       {
         "race": "RaceNightElf",
-        "dps": 803.2787239659598
+        "dps": 803.4446520053742
       },
       {
         "race": "RaceOrc",
-        "dps": 802.0789685143681
+        "dps": 802.4268997700732
       },
       {
         "race": "RaceTroll",
-        "dps": 796.2659625237102
+        "dps": 796.1571663472056
       },
       {
         "race": "RaceHuman",
-        "dps": 795.6821118805028
+        "dps": 795.6479560947247
       },
       {
         "race": "RaceSkyborneWindshaper",
-        "dps": 794.8566675391522
+        "dps": 794.9350751119024
       },
       {
         "race": "RaceSkyborneHighOrder",
-        "dps": 794.7072277691799
+        "dps": 794.6837484250448
       },
       {
         "race": "RaceTauren",
-        "dps": 794.5023776061711
+        "dps": 794.478068222807
       },
       {
         "race": "RaceDwarf",
-        "dps": 793.7820031578678
+        "dps": 793.5199228297278
       }
     ]
   },
@@ -317,23 +317,23 @@
     "results": [
       {
         "race": "RaceTroll",
-        "dps": 2347.644008181972
-      },
-      {
-        "race": "RaceUndead",
-        "dps": 2337.5360856183706
-      },
-      {
-        "race": "RaceHuman",
-        "dps": 2311.9614257868175
-      },
-      {
-        "race": "RaceOrc",
-        "dps": 2310.580357238365
+        "dps": 2347.6408263210315
       },
       {
         "race": "RaceGnome",
-        "dps": 2078.572483684395
+        "dps": 2341.5364551784533
+      },
+      {
+        "race": "RaceUndead",
+        "dps": 2337.651993209933
+      },
+      {
+        "race": "RaceHuman",
+        "dps": 2312.159539096045
+      },
+      {
+        "race": "RaceOrc",
+        "dps": 2310.1869348879122
       }
     ]
   },
@@ -343,23 +343,23 @@
     "results": [
       {
         "race": "RaceUndead",
-        "dps": 2247.3786326372037
-      },
-      {
-        "race": "RaceTroll",
-        "dps": 2240.176679433148
-      },
-      {
-        "race": "RaceHuman",
-        "dps": 2226.2901026920513
-      },
-      {
-        "race": "RaceOrc",
-        "dps": 2223.4551316790958
+        "dps": 2247.2681018834132
       },
       {
         "race": "RaceGnome",
-        "dps": 2110.565855300722
+        "dps": 2241.243196131995
+      },
+      {
+        "race": "RaceTroll",
+        "dps": 2239.654308761299
+      },
+      {
+        "race": "RaceHuman",
+        "dps": 2226.5634348005306
+      },
+      {
+        "race": "RaceOrc",
+        "dps": 2223.768923505081
       }
     ]
   },
@@ -368,28 +368,28 @@
     "duration": 60,
     "results": [
       {
+        "race": "RaceGnome",
+        "dps": 2542.0959768424764
+      },
+      {
         "race": "RaceNightElf",
-        "dps": 2519.7678256718286
+        "dps": 2520.1555796829794
       },
       {
         "race": "RaceUndead",
-        "dps": 2483.5799847465696
+        "dps": 2483.494110350269
       },
       {
         "race": "RaceDwarf",
-        "dps": 2462.4914033557625
+        "dps": 2461.9739751022657
       },
       {
         "race": "RaceHuman",
-        "dps": 2461.54660718339
+        "dps": 2461.276632100231
       },
       {
         "race": "RaceTroll",
-        "dps": 2459.2128590235184
-      },
-      {
-        "race": "RaceGnome",
-        "dps": 1751.443734886398
+        "dps": 2458.821851340035
       }
     ]
   },
@@ -398,28 +398,28 @@
     "duration": 120,
     "results": [
       {
+        "race": "RaceGnome",
+        "dps": 2587.890737840742
+      },
+      {
         "race": "RaceNightElf",
-        "dps": 2567.0000566331164
+        "dps": 2567.3652153492912
       },
       {
         "race": "RaceUndead",
-        "dps": 2533.823566707195
-      },
-      {
-        "race": "RaceDwarf",
-        "dps": 2514.4207430908295
-      },
-      {
-        "race": "RaceTroll",
-        "dps": 2514.2205767393116
+        "dps": 2533.9862085530604
       },
       {
         "race": "RaceHuman",
-        "dps": 2513.998800422052
+        "dps": 2514.939505692424
       },
       {
-        "race": "RaceGnome",
-        "dps": 1860.8819788827814
+        "race": "RaceTroll",
+        "dps": 2514.4233088195683
+      },
+      {
+        "race": "RaceDwarf",
+        "dps": 2514.3900042186747
       }
     ]
   },
@@ -429,15 +429,15 @@
     "results": [
       {
         "race": "RaceUndead",
-        "dps": 1909.1750492737185
+        "dps": 1909.6233274989509
       },
       {
         "race": "RaceHuman",
-        "dps": 1872.2028478543473
+        "dps": 1872.6764657781566
       },
       {
         "race": "RaceDwarf",
-        "dps": 1871.445623216664
+        "dps": 1871.1162843928014
       }
     ]
   },
@@ -447,15 +447,15 @@
     "results": [
       {
         "race": "RaceUndead",
-        "dps": 1800.1893525302758
+        "dps": 1800.916580476532
       },
       {
         "race": "RaceHuman",
-        "dps": 1763.321222393015
+        "dps": 1763.3110833900373
       },
       {
         "race": "RaceDwarf",
-        "dps": 1762.0540581261835
+        "dps": 1762.4254096371421
       }
     ]
   },
@@ -465,23 +465,23 @@
     "results": [
       {
         "race": "RaceOrc",
-        "dps": 2701.8525346253127
+        "dps": 2701.7717852331966
       },
       {
         "race": "RaceTroll",
-        "dps": 2688.9004382810117
+        "dps": 2689.414473804518
       },
       {
         "race": "RaceSkyborneWindshaper",
-        "dps": 2672.456603450686
+        "dps": 2671.0930315028386
       },
       {
         "race": "RaceTauren",
-        "dps": 2667.543019075674
+        "dps": 2667.8966648662235
       },
       {
         "race": "RaceDwarf",
-        "dps": 2658.2494114499113
+        "dps": 2658.724737287904
       }
     ]
   },
@@ -491,23 +491,23 @@
     "results": [
       {
         "race": "RaceOrc",
-        "dps": 2548.7624260442262
+        "dps": 2548.3627141726074
       },
       {
         "race": "RaceSkyborneWindshaper",
-        "dps": 2545.150268063681
+        "dps": 2545.742776903762
       },
       {
         "race": "RaceTroll",
-        "dps": 2542.022993468757
+        "dps": 2542.634854083393
       },
       {
         "race": "RaceTauren",
-        "dps": 2536.6659081562902
+        "dps": 2535.9582843333915
       },
       {
         "race": "RaceDwarf",
-        "dps": 2526.282501030261
+        "dps": 2525.857497671652
       }
     ]
   },
@@ -517,19 +517,19 @@
     "results": [
       {
         "race": "RaceNightElf",
-        "dps": 3637.793501074189
-      },
-      {
-        "race": "RaceSkyborneWindshaper",
-        "dps": 3540.6307244728114
+        "dps": 3638.448846226918
       },
       {
         "race": "RaceSkyborneHighOrder",
-        "dps": 3540.12123795821
+        "dps": 3539.987697640632
+      },
+      {
+        "race": "RaceSkyborneWindshaper",
+        "dps": 3539.85955223575
       },
       {
         "race": "RaceTauren",
-        "dps": 3531.4885763181105
+        "dps": 3531.6136634699483
       }
     ]
   },
@@ -539,19 +539,19 @@
     "results": [
       {
         "race": "RaceNightElf",
-        "dps": 3365.504268108458
-      },
-      {
-        "race": "RaceSkyborneWindshaper",
-        "dps": 3324.025495756266
+        "dps": 3365.489649274749
       },
       {
         "race": "RaceSkyborneHighOrder",
-        "dps": 3323.854228398962
+        "dps": 3323.8966736655075
+      },
+      {
+        "race": "RaceSkyborneWindshaper",
+        "dps": 3323.780047320046
       },
       {
         "race": "RaceTauren",
-        "dps": 3306.14136632193
+        "dps": 3306.420657456828
       }
     ]
   }

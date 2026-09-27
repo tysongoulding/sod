@@ -78,6 +78,10 @@ func applyRaceEffects(agent Agent) {
 		// Warrior: Maximum Rage +5%
 		if slices.Contains([]proto.Class{proto.Class_ClassPriest, proto.Class_ClassMage, proto.Class_ClassWarlock}, character.Class) {
 			character.MultiplyStat(stats.Mana, 1.05)
+		} else if character.Class == proto.Class_ClassRogue {
+			character.Env.RegisterPostFinalizeEffect(func() {
+				character.Unit.energyBar.maxEnergy *= 1.05
+			})
 		}
 
 		// Eureka! (Next 3 damaging abilities deal +10% damage and cost -10% resource, 2 min CD)
@@ -98,7 +102,7 @@ func applyRaceEffects(agent Agent) {
 		})
 		eurekaAura.AttachSpellMod(SpellModConfig{
 			Kind:       SpellMod_DamageDone_Pct,
-			FloatValue: 0.10,
+			FloatValue: 1.10,
 		})
 		eurekaAura.AttachSpellMod(SpellModConfig{
 			Kind:     SpellMod_PowerCost_Pct,
